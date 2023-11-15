@@ -44,7 +44,7 @@ async def get_reco(
     else:
         raise ValueError()
 
-    if user_id > 10 ** 9:
+    if user_id > 10**9:
         raise UserNotFoundError(error_message=f"User {user_id} not found")
 
     return RecoResponse(user_id=user_id, items=reco)
