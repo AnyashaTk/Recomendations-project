@@ -36,6 +36,9 @@ async def get_reco(
 ) -> RecoResponse:
     app_logger.info(f"Request for model: {model_name}, user_id: {user_id}")
 
+    if user_id > 10**9:
+        raise UserNotFoundError(error_message=f"User {user_id} not found")
+
     if model_name == "random":
         reco = [random.randint(0, 1000) for _ in range(10)]
     elif model_name == "top":
@@ -43,9 +46,6 @@ async def get_reco(
         reco = list(range(k_recs))
     else:
         raise ValueError()
-
-    if user_id > 10**9:
-        raise UserNotFoundError(error_message=f"User {user_id} not found")
 
     return RecoResponse(user_id=user_id, items=reco)
 
