@@ -1,3 +1,4 @@
+import random
 from typing import List
 
 from fastapi import APIRouter, FastAPI, Request
@@ -35,13 +36,17 @@ async def get_reco(
 ) -> RecoResponse:
     app_logger.info(f"Request for model: {model_name}, user_id: {user_id}")
 
-    # Write your code here
-
     if user_id > 10**9:
         raise UserNotFoundError(error_message=f"User {user_id} not found")
 
-    k_recs = request.app.state.k_recs
-    reco = list(range(k_recs))
+    if model_name == "random":
+        reco = [random.randint(0, 1000) for _ in range(10)]
+    elif model_name == "top":
+        k_recs = request.app.state.k_recs
+        reco = list(range(k_recs))
+    else:
+        raise ValueError()
+
     return RecoResponse(user_id=user_id, items=reco)
 
 
