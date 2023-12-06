@@ -82,7 +82,10 @@ class UserKnn():
             return [self.users_inv_mapping[user] for user in users], sim
         return _recs_mapper
     
-    def predict(self, test: pd.DataFrame, N_recs: int = 10):
+    def predict(self, test: pd.DataFrame, N_recs: int = 10, user_ids=None):
+        
+        if user_ids is None:
+            user_ids = test['user_id'].unique()
         
         if not self.is_fitted:
             raise ValueError("Please call fit before predict")
@@ -108,5 +111,6 @@ class UserKnn():
         recs['score'] = recs['sim'] * recs['idf']
         recs = recs.sort_values(['user_id', 'score'], ascending=False)
         recs['rank'] = recs.groupby('user_id').cumcount() + 1 
-        return recs[recs['rank'] <= N_recs][['user_id', 'item_id', 'score', 'rank']]
+        # изменены параметры для возвращения значения
+        return recs[(recs['rank'] <= N_recs) & (recs['user_id'].isin(user_ids))][['user_id', 'item_id', 'score', 'rank']]
     
