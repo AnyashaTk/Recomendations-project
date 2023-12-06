@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from service.api.exceptions import UserNotFoundError
 from service.log import app_logger
+
 from ..models import Bm25KnnModel
 
 
