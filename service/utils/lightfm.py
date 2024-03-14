@@ -6,7 +6,7 @@ from data_preprocess import Preprocessing, load_dataset
 
 
 class LightFM:
-    def __init__(self, dataset, path="../../models/lfm_model.dill"):
+    def __init__(self, dataset, path="../../models/lfm_model.dill") -> None:
         with open(path, "rb") as f:
             self.model = dill.load(f)
         self.dataset = deepcopy(dataset)
@@ -21,7 +21,7 @@ class LightFM:
         return augmented_item_embeddings, augmented_user_embeddings
 
     @staticmethod
-    def augment_inner_product(factors):
+    def augment_inner_product(factors) -> tuple:
         normed_factors = np.linalg.norm(factors, axis=1)
         max_norm = normed_factors.max()
 

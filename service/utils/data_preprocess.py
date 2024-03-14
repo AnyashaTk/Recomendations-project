@@ -4,7 +4,7 @@ from rectools import Columns
 from rectools.dataset import Dataset
 
 
-def load_dataset(path='../../data_original'):
+def load_dataset(path='../../data_original') -> tuple:
     interactions = pd.read_csv(f"{path}/interactions.csv")
     users = pd.read_csv(f"{path}/users.csv")
     items = pd.read_csv(f"{path}/items.csv")
@@ -27,7 +27,7 @@ class Preprocessing:
             cat_item_features=["genre", "content_type"])
 
     @staticmethod
-    def __preprocess(users, items, interactions):
+    def __preprocess(users, items, interactions) -> pd.DataFrame:
         Columns.Datetime = "last_watch_dt"
         interactions.drop(
             interactions[interactions[Columns.Datetime].str.len() != 10].index,
@@ -44,7 +44,7 @@ class Preprocessing:
         return train
 
     @staticmethod
-    def __prepare_features(users, items, train):
+    def __prepare_features(users, items, train) -> tuple:
         users.fillna("Unknown", inplace=True)
         users = users.loc[users[Columns.User].isin(train[Columns.User])].copy()
         user_features_frames = []
@@ -59,7 +59,7 @@ class Preprocessing:
         return users, items, user_features
 
     @staticmethod
-    def __explode_genres(items):
+    def __explode_genres(items) -> pd.DataFrame:
         # Genre
         # Explode genres to flatten table
         items["genre"] = items["genres"].str.lower().str.replace(", ", ",",
@@ -75,5 +75,5 @@ class Preprocessing:
         item_features = pd.concat((genre_feature, content_feature))
         return item_features
 
-    def get_dataset(self):
+    def get_dataset(self) -> Dataset:
         return self.dataset
