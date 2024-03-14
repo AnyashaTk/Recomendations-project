@@ -1,6 +1,7 @@
-import numpy as np
 from copy import deepcopy
 import dill
+import numpy as np
+
 from data_preprocess import Preprocessing, load_dataset
 
 

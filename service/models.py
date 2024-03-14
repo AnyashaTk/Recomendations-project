@@ -1,8 +1,7 @@
 import dill
-import typing as tp
-
 import pandas as pd
 from pydantic import BaseModel
+import typing as tp
 
 from service.utils.data_preprocess import Preprocessing, load_dataset
 
@@ -54,4 +53,4 @@ class CatBoostReranker(BaseModel):
     def __call__(self, user_id, *args, **kwargs):
         y_pred = self.model.predict(self.data)
 
-        return ""
+        return y_pred
