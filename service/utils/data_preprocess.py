@@ -4,8 +4,7 @@ from rectools import Columns
 from rectools.dataset import Dataset
 
 
-def load_dataset(path='../../data_original') -> (
-    pd.DataFrame, pd.DataFrame, pd.DataFrame):
+def load_dataset(path='../../data_original'):
     interactions = pd.read_csv(f"{path}/interactions.csv")
     users = pd.read_csv(f"{path}/users.csv")
     items = pd.read_csv(f"{path}/items.csv")
@@ -78,6 +77,3 @@ class Preprocessing:
 
     def get_dataset(self):
         return self.dataset
-
-
-
