@@ -1,8 +1,7 @@
-from copy import deepcopy
-
-import dill
 import numpy as np
-from data_preprocess import load_dataset, Preprocessing
+from copy import deepcopy
+import dill
+from data_preprocess import Preprocessing, load_dataset
 
 
 class LightFM:
@@ -14,13 +13,10 @@ class LightFM:
     def get_vectors(self):
         user_embeddings, item_embeddings = None, None
         if self.model and self.dataset:
-            user_embeddings, item_embeddings = self.model.get_vectors(
-                self.dataset)
-        _, augmented_item_embeddings = self.augment_inner_product(
-            item_embeddings)
+            user_embeddings, item_embeddings = self.model.get_vectors(self.dataset)
+        _, augmented_item_embeddings = self.augment_inner_product(item_embeddings)
         extra_zero = np.zeros((user_embeddings.shape[0], 1))
-        augmented_user_embeddings = np.append(user_embeddings, extra_zero,
-                                              axis=1)
+        augmented_user_embeddings = np.append(user_embeddings, extra_zero, axis=1)
         return augmented_item_embeddings, augmented_user_embeddings
 
     @staticmethod
@@ -28,7 +24,7 @@ class LightFM:
         normed_factors = np.linalg.norm(factors, axis=1)
         max_norm = normed_factors.max()
 
-        extra_dim = np.sqrt(max_norm ** 2 - normed_factors ** 2).reshape(-1, 1)
+        extra_dim = np.sqrt(max_norm**2 - normed_factors**2).reshape(-1, 1)
         augmented_factors = np.append(factors, extra_dim, axis=1)
         return max_norm, augmented_factors
 
@@ -50,9 +46,7 @@ class LightFM:
 
 
 interactions_df, users_df, items_df = load_dataset()
-preprocessing_dataset = Preprocessing(users=users_df.copy(),
-                                      items=items_df.copy(),
-                                      interactions=interactions_df.copy())
+preprocessing_dataset = Preprocessing(users=users_df.copy(), items=items_df.copy(), interactions=interactions_df.copy())
 dataset = preprocessing_dataset.get_dataset()
 
 lightfm = LightFM(dataset=dataset)
