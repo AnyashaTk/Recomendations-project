@@ -7,8 +7,6 @@ from pydantic import BaseModel
 from service.api.exceptions import UserNotFoundError
 from service.log import app_logger
 
-from ..models import Bm25KnnModel, CatBoostReranker
-
 
 class RecoResponse(BaseModel):
     user_id: int
@@ -46,12 +44,6 @@ async def get_reco(
     elif model_name == "top":
         k_recs = request.app.state.k_recs
         reco = list(range(k_recs))
-    elif model_name == "knn_bm25":
-        knn_model = Bm25KnnModel()
-        reco = knn_model(user_id)
-    elif model_name == "catboost_reranker":
-        model = CatBoostReranker()
-        reco = model(user_id)
     else:
         raise ValueError()
 
