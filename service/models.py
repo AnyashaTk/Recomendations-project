@@ -22,10 +22,9 @@ def get_data(path="data_original") -> Dataset:
     return preprocessing_dataset.get_dataset()
 
 
-class UsePopularM(BaseModel):
+class UsePopularM:
     def __init__(self, path_model="",
                  path_dataset="../data_original", **data) -> None:
-        super().__init__(**data)
         with open(path_model + "model_popular.dill", "rb") as f:
             self.model = dill.load(f)
         self.dataset = get_data(path_dataset)
@@ -34,9 +33,9 @@ class UsePopularM(BaseModel):
         return self.model.recommend(users=[0], dataset=self.dataset, k=10, filter_viewed=True)["item_id"].tolist()
 
 
-class Bm25KnnModel(BaseModel):
+class Bm25KnnModel:
     def __init__(self, **data) -> None:
-        super().__init__(**data)
+        pass
 
     def __call__(self, user_id: int, *args, **kwargs) -> list:
         knn = pd.read_csv("../processed_data/knn_bm25.csv")
@@ -50,7 +49,8 @@ class Bm25KnnModel(BaseModel):
 class CatBoostReranker(BaseModel):
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        self.model = dill.load(open("../models/CatBoostRanker_model.dill", "rb"))
+        with open("../models/CatBoostRanker_model.dill", "rb") as f:
+            self.model = dill.load(f)
         self.data = pd.read_csv("../data_original/users.csv")
 
     def __call__(self, user_id, *args, **kwargs) -> list:
