@@ -1,7 +1,8 @@
+import typing as tp
+
 import dill
 import pandas as pd
 from pydantic import BaseModel
-import typing as tp
 
 from service.utils.data_preprocess import Preprocessing, load_dataset
 
