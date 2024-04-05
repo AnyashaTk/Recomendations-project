@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from service.api.exceptions import UserNotFoundError
 from service.log import app_logger
 
-from ..models import Bm25KnnModel
+from ..models import Bm25KnnModel, UsePopularM, Lightfm, DSSM, CatBoostReranker
 
 
 class RecoResponse(BaseModel):
@@ -49,6 +49,18 @@ async def get_reco(
     elif model_name == "knn_bm25":
         knn_model = Bm25KnnModel()
         reco = knn_model(user_id)
+    elif model_name == "popular":
+        knn_model = UsePopularM()
+        reco = knn_model(user_id)
+    elif model_name == "lightfm":
+        model = Lightfm()
+        reco = model(user_id)
+    elif model_name == "dssm":
+        model = DSSM()
+        reco = model(user_id)
+    elif model_name == "catboost_ranker":
+        model = CatBoostReranker()
+        reco = model(user_id)
     else:
         raise ValueError()
 
